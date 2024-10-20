@@ -37,19 +37,39 @@ const books = ref([
 	},
 ]);
 
+const filteredBooks = ref([...books.value]);
+
 // Add Book
 const handleBookAdded = (bookData) => {
-  books.value.push(bookData);
-  console.log("book added");
+	books.value.push(bookData);
+	console.log("book added");
 };
 
+// Delete Book
+const handleBookDeleted = (id) => {
+	books.value = books.value.filter((book) => {
+		return book.id !== id;
+	});
+	console.log("Book Deleted Succesfully!");
+};
+
+// Search For Book
+const handleBookSearch = (searchterm) => {
+	if (searchterm.trim() !== "") {
+		filteredBooks.value = filteredBooks.value.filter((book) =>
+			book.bookName.toLowerCase().includes(searchterm.toLowerCase())
+		);
+	} else {
+		filteredBooks.value = books.value;
+	}
+};
 </script>
 
 <template>
 	<main class="flex flex-col items-center m-4 gap-2">
 		<Title />
-		<AddBook @book-added="handleBookAdded"/>
-		<SearchBar />
-		<BookList :books="books" />
+		<AddBook @book-added="handleBookAdded" />
+		<SearchBar @book-searched="handleBookSearch" />
+		<BookList @book-deleted="handleBookDeleted" :books="filteredBooks" />
 	</main>
 </template>

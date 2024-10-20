@@ -1,13 +1,23 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
+
+const emit = defineEmits(["bookDeleted"]);
 
 const props = defineProps({
-    books: {
-        type: Array,
-        required: false,
-    }
-})
+	books: {
+		type: Array,
+		required: false,
+	},
+});
 
+const editBook = (id) => {
+	emit("bookEdited", id);
+};
+
+const deleteBook = (id) => {
+	emit("bookDeleted", id);
+    console.log("book deletion emited:", id);
+};
 </script>
 
 <template>
@@ -24,8 +34,8 @@ const props = defineProps({
 				<td>{{ book.bookRating }}</td>
 				<td>{{ book.bookProgress }}</td>
 				<td>
-					<button>Edit</button>
-					<button>Delete</button>
+					<button @click="editBook(book.id)">Edit</button>
+					<button @click="deleteBook(book.id)">Delete</button>
 				</td>
 			</tr>
 		</tbody>
